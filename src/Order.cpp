@@ -166,9 +166,6 @@ static bool read_bool(const std::string& prompt) {
     }
 }
 
-static std::string default_if_d(const std::string& name, const std::string& fallback) {
-    return (name == "d" ? fallback : name);
-}
 
 Order::Order() : ID(++ID_generator), state("processing") {
     std::cout << "Creating order: " << this->ID << "\n\n";
