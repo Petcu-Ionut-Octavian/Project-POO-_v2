@@ -196,7 +196,7 @@ Order::Order() : ID(++ID_generator), state("processing") {
 
             name = default_if_d(name, "Water");
 
-            double grams = read_double("Grams: ");
+            double grams = read_double("Grams(150-800): ");
             bool pet = read_bool("Is PET? (1/0): ");
 
             products.push_back(new Drink(name, grams, pet));
@@ -209,7 +209,7 @@ Order::Order() : ID(++ID_generator), state("processing") {
 
             name = default_if_d(name, "Cake");
 
-            double grams = read_double("Grams: ");
+            double grams = read_double("Grams(150-800): ");
 
             // Clear leftover newline
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -227,7 +227,7 @@ Order::Order() : ID(++ID_generator), state("processing") {
 
             name = default_if_d(name, "ClassicBurger");
 
-            double grams = read_double("Grams: ");
+            double grams = read_double("Grams(150-800): ");
 
             products.push_back(new Burger(name, grams));
         }
