@@ -166,8 +166,16 @@ static bool read_bool(const std::string& prompt) {
     }
 }
 
+static std::string default_if_d(const std::string& name, const std::string& fallback) {
+    return (name == "d" ? fallback : name);
+}
+
 Order::Order() : ID(++ID_generator), state("processing") {
     std::cout << "Creating order: " << this->ID << "\n\n";
+
+    auto default_if_d = [](const std::string& name, const std::string& fallback) {
+        return (name == "d" ? fallback : name);
+    };
 
     while (true) {
         std::cout << "Choose product type:\n";
@@ -184,9 +192,12 @@ Order::Order() : ID(++ID_generator), state("processing") {
         }
 
         if (choice == 1) {
+            // DRINK
             std::string name;
-            std::cout << "Drink name: ";
+            std::cout << "Drink name(d = default): ";
             std::cin >> name;
+
+            name = default_if_d(name, "Water");
 
             double grams = read_double("Grams: ");
             bool pet = read_bool("Is PET? (1/0): ");
@@ -194,15 +205,17 @@ Order::Order() : ID(++ID_generator), state("processing") {
             products.push_back(new Drink(name, grams, pet));
         }
         else if (choice == 2) {
+            // DESERT
             std::string name, serving;
-            std::cout << "Desert name: ";
+            std::cout << "Desert name(d = default): ";
             std::cin >> name;
+
+            name = default_if_d(name, "Cake");
 
             double grams = read_double("Grams: ");
 
-            // clear leftover newline from buffer
+            // Clear leftover newline
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
 
             std::cout << "Serving type (slice/cup/portion): ";
             std::cin >> serving;
@@ -210,9 +223,12 @@ Order::Order() : ID(++ID_generator), state("processing") {
             products.push_back(new Desert(name, grams, serving));
         }
         else if (choice == 3) {
+            // BURGER
             std::string name;
-            std::cout << "Burger name: ";
+            std::cout << "Burger name(d = default): ";
             std::cin >> name;
+
+            name = default_if_d(name, "ClassicBurger");
 
             double grams = read_double("Grams: ");
 
