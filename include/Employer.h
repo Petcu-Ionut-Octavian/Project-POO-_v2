@@ -11,6 +11,8 @@ class Employer {
 protected:
     double energy = 0;
     bool used = false;
+    int ID;
+    inline static int ID_generator = 0;
 public:
     Employer();
     virtual ~Employer();
@@ -22,19 +24,26 @@ public:
     [[nodiscard]] std::string get_role() const;
     [[nodiscard]] double getEnergy() const;
     [[nodiscard]] bool getUsed() const;
+    [[nodiscard]] int getID() const;
 
 };
 
 class Cashier final : public Employer {
 public:
+    Cashier();
+    ~Cashier() override;
     void process(Order& order) override;
 };
 class Delivery final : public Employer {
 public:
+    Delivery();
+    ~Delivery() override;
     void deliver(Order& order) override;
 };
 class Cook final : public Employer {
 public:
+    Cook();
+    ~Cook() override;
     void prepare(Order& order) override;
     void reset() override;
 };

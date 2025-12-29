@@ -9,7 +9,27 @@
 #include "../include/Order.h"
 
 /// Constructors
-Product::Product(std::string name, double grams) : name(std::move(name)), grams(grams) {}
+Product::Product(std::string name, double grams)
+    : name(std::move(name))
+{
+    while (true) {
+        if (grams >= 150 && grams <= 800) {
+            this->grams = grams;
+            break;
+        }
+
+        std::cout << "Invalid grams (" << grams << "). Must be between 150 and 800. Re-enter: ";
+
+        std::cin >> grams;
+
+        // optional: handle cin failure
+        if (!std::cin) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            grams = -1; // force retry
+        }
+    }
+}
 Drink::Drink(std::string name, double grams, bool pet) : Product(std::move(name),grams), pet(pet) {}
 Desert::Desert(std::string name, double grams, std::string serving_type) : Product(std::move(name), grams) {
     // validating serving_type

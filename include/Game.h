@@ -45,6 +45,8 @@ public:
 
     static void run_role(const std::string& role_name);
 
+    static void run_rest();
+
 
 };
 

@@ -1,4 +1,7 @@
+#include <iostream>
+
 #include "include/Game.h"
+#include "include/Error.h"
 
 
 int main() {
@@ -7,7 +10,12 @@ int main() {
     Game::get_instance();
 
 
-    Game::play();
+    try {
+        Game::play();
+    } catch (const team_empty& e) {
+        std::cout << e.what() << "\n";
+    }
+
 
     return 0;
 }

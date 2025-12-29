@@ -6,19 +6,30 @@
 
 #include "../include/Employer.h"
 
-Employer::Employer() : energy(100) {}
+Employer::Employer() : energy(100), ID(++ID_generator) {}
+Cashier::Cashier() = default;
+Cook::Cook() = default;
+Delivery::Delivery() = default;
+
 Employer::~Employer() = default;
+Cashier::~Cashier() = default;
+Cook::~Cook() = default;
+Delivery::~Delivery() = default;
+
+
+
 
 
 void Employer::process(Order &order) {
-    std::cout << "Processing order: "<<order.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "processing order " << order.get_ID() << "...\n";
+
     this->energy -= 100;
     this->used = true;
     order.next_state();
 }
 
 void Employer::prepare(Order &order) {
-    std::cout << "Preparing order: "<<order.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "preparing order: "<<order.get_ID()<<"\n";
     this->used = true;
 
     double remaining = order.get_remaining_energy();
@@ -41,7 +52,7 @@ void Employer::prepare(Order &order) {
 }
 
 void Employer::deliver(Order &order) {
-    std::cout << "Delivering order: "<<order.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "delivering order: "<<order.get_ID()<<"\n";
     this->used = true;
     this->energy -= 100;
 }
@@ -67,21 +78,26 @@ bool Employer::getUsed() const {
     return used;
 }
 
+int Employer::getID() const {
+    return ID;
+}
+
+
 void Cashier::process(Order &order) {
-    std::cout << "Processing order: "<<order.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "processing order: "<<order.get_ID()<<"\n";
     this->energy -= 25;
     this->used = true;
     order.next_state();
 }
 
 void Delivery::deliver(Order &order) {
-    std::cout << "Delivering order: "<<order.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "delivering order: "<<order.get_ID()<<"\n";
     this->used = true;
     this->energy -= 25;
 }
 
 void Cook::prepare(Order &order) {
-    std::cout << "Preparing order: "<<order.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "preparing order: "<<order.get_ID()<<"\n";
     this->used = true;
 
     double remaining = order.get_remaining_energy();

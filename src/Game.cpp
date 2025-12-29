@@ -5,9 +5,11 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <algorithm>
 #include "../include/Employer.h"
 #include "../include/Order.h"
 #include "../include/Game.h"
+#include "../include/Error.h"
 
 
 Game* Game::instance = nullptr;
@@ -24,10 +26,11 @@ void Game::print_team() {
     std::cout << "Your team:\n";
 
     for (auto* emp : team) {
-        std::cout << emp->get_role() << " "
-                  << emp->getEnergy() << " "
-                  << (emp->getUsed() ? "used" : "not used")
-                  << "\n";
+        std::cout << emp->get_role()
+          << " (ID: " << emp->getID() << ") "
+          << "Energy: " << emp->getEnergy() << " "
+          << "[" << (emp->getUsed() ? "used" : "not used") << "]"
+          << "\n";
     }
     std::cout << "#####################\n";
 }
@@ -125,6 +128,11 @@ void Game::set_team() {
         }
     }
 
+
+    if (team.empty()) {
+        throw team_empty();
+    }
+
     std::cout << "\nTeam created with " << team.size() << " employers.\n";
     print_team();
 }
@@ -175,14 +183,45 @@ void Game::start() {
         /// Processing the events
         std::cout << "########## Starting the simulator...\n\n";
 
-        // 1. Cashiers first
-        run_role("Cashier");
 
-        // 2. Then cooks
-        run_role("Cook");
 
-        // 3. Then delivery
-        run_role("Delivery");
+        /// Sorting the orders
+        std::ranges::sort(orders, [](const Order* a, const Order* b) {
+
+            auto priority = [](const std::string& s) {
+                if (s == "delivering") return 0;
+                if (s == "preparing")  return 1;
+                if (s == "processing") return 2;   // added explicitly for readability
+                return 3; // fallback, should never happen
+            };
+
+            const int pa = priority(a->get_state());
+
+            if (const int pb = priority(b->get_state()); pa != pb)
+                return pa < pb;
+
+            return a->get_remaining_energy() < b->get_remaining_energy();
+            }
+        );
+
+
+        try {
+            // 1. Cashiers first
+            run_role("Cashier");
+
+            // 2. Then cooks
+            run_role("Cook");
+
+            // 3. Then delivery
+            run_role("Delivery");
+
+            // 4. The rest
+            run_rest();
+
+        } catch (const no_more_orders& e) {
+            std::cout << e.what() << "\n";
+        }
+
 
 
 
@@ -220,66 +259,73 @@ void Game::run_role(const std::string& role_name) {
         if (emp->getUsed())
             continue;
 
+        if (orders.empty())
+        throw no_more_orders();
+
         if (emp->get_role() != role_name)
             continue;
 
-        // Determine the optimal state for this role
+        // Determine optimal state
         std::string optimal;
         if (role_name == "Cashier")   optimal = "processing";
         if (role_name == "Cook")      optimal = "preparing";
         if (role_name == "Delivery")  optimal = "delivering";
 
-        bool worked = false;
-
-        // ============================
-        // 1. Try OPTIMAL state first
-        // ============================
+        // Try to find an order in the optimal state
         for (auto it = orders.begin(); it != orders.end(); ++it) {
 
             Order* order = *it;
-            std::string state = order->get_state();
 
-            if (state == optimal) {
+            if (order->get_state() == optimal) {
 
-                // Perform the correct action
-                if (state == "processing") emp->process(*order);
-                else if (state == "preparing") emp->prepare(*order);
-                else if (state == "delivering") {
+                // Perform correct action
+                if (optimal == "processing") {
+                    emp->process(*order);
+                }
+                else if (optimal == "preparing") {
+                    emp->prepare(*order);
+                }
+                else if (optimal == "delivering") {
                     emp->deliver(*order);
                     delete order;
                     orders.erase(it);
                 }
 
-                worked = true;
                 break;
             }
         }
+    }
+}
 
-        if (worked)
+
+
+
+
+void Game::run_rest() {
+
+    for (auto* emp : team) {
+
+        if (emp->getUsed())
             continue;
 
-        // ============================
-        // 2. FALLBACK: first available order
-        // ============================
-        for (auto it = orders.begin(); it != orders.end(); ++it) {
+        if (orders.empty())
+            throw no_more_orders();
 
-            Order* order = *it;
-            std::string state = order->get_state();
+        // Fallback: first available order
+        auto it = orders.begin();
+        Order* order = *it;
+        const std::string state = order->get_state();
 
-            // Do the correct action for the state
-            if (state == "processing") {
-                emp->process(*order);
-            }
-            else if (state == "preparing") {
-                emp->prepare(*order);
-            }
-            else if (state == "delivering") {
-                emp->deliver(*order);
-                delete order;
-                orders.erase(it);
-            }
-
-            break; // employer used
+        if (state == "processing") {
+            emp->process(*order);
+        }
+        else if (state == "preparing") {
+            emp->prepare(*order);
+        }
+        else if (state == "delivering") {
+            emp->deliver(*order);
+            delete order;
+            orders.erase(it);
         }
     }
 }
