@@ -77,6 +77,23 @@ The simulation runs entirely in the console with:
 - Cycle summaries
 - Real‑time feedback on employee actions
 
+⚡ Random Events (Real‑World Simulation)
+To make the simulation feel alive and unpredictable, the system includes random real‑world events that can affect both employees and orders.
+🎲 Employee Events
+During each cycle, every employee may experience unexpected situations such as:
+- Getting sick
+- Unexpected emergencies
+- Minor injuries
+- Personal matters
+- Transportation issues
+- Exhaustion
+Each event has a probability (e.g., 10%) and, when triggered, marks the employee as used, preventing them from working that turn.
+
+🎲 Order Events
+Orders can also be affected by unexpected problems.
+For example:
+- Spilled order → resets progress and returns to processing state.
+
 🚀 Why This Project Is Interesting
 This project demonstrates:
 - Clean OOP design

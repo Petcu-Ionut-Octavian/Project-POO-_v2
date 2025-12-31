@@ -8,7 +8,7 @@
 class Game {
 private:
     // Singleton instance
-    static Game* instance;
+    // static Game* instance;
 
     // Private constructor
     Game() = default;

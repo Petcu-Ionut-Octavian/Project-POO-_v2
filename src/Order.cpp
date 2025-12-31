@@ -74,16 +74,16 @@ Burger::Burger(std::string name, double grams) : Product(std::move(name), grams)
     };
 
 
-    ask("Add beef patty? ", "beef patty");
-    ask("Add lettuce? ", "lettuce");
-    ask("Add tomato slices? ", "tomato slices");
-    ask("Add cheddar cheese? ", "cheddar cheese");
-    ask("Add onions? ", "onions");
+    ask("Add extra beef patty? ", "beef patty");
+    ask("Add extra lettuce? ", "lettuce");
+    ask("Add extra tomato slices? ", "tomato slices");
+    ask("Add extra cheddar cheese? ", "cheddar cheese");
+    ask("Add extra onions? ", "onions");
 
     // If no ingredients were added, add a default one
     if (ingredients.empty()) {
-        std::cout << "No ingredients selected. Adding default meat.\n";
-        ingredients.emplace_back("default meat");
+        std::cout << "No ingredients selected.\n";
+        ingredients.emplace_back("default");
     }
 
     std::cout << "Burger created with ingredients:\n";
