@@ -13,39 +13,44 @@ private:
     // Private constructor
     Game() = default;
 
+    std::vector<Employer*> team = {};
+    std::vector<Order*> orders = {};
+
+public:
+
     // Prevent copying
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
-    static std::vector<Employer*> team;
-    static std::vector<Order*> orders;
-
-public:
-
     // Accessor for singleton instance
     static Game& get_instance() {
-        if (!instance)
-            instance = new Game();
-        return *instance;
+        static Game instance;
+        return instance;
     }
 
     // Destructor
-    ~Game() = default;
+    ~Game(){
+        for (auto* ord : orders)
+            delete ord;
+
+        for (auto* emp : team)
+            delete emp;
+    }
 
 
-    static void print_team();
+    void print_team() const;
 
-    static void print_orders();
+    void print_orders() const;
 
-    static void set_team();
+    void set_team();
 
-    static void start();
+    void start();
 
-    static void play();
+    void play();
 
-    static void run_role(const std::string& role_name);
+    void run_role(const std::string& role_name);
 
-    static void run_rest();
+    void run_rest();
 
 
 };

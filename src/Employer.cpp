@@ -18,6 +18,9 @@ Delivery::~Delivery() = default;
 
 
 
+void Employer::setUsed(bool used) {
+    this->used = used;
+}
 
 
 void Employer::process(Order &order) {
@@ -82,6 +85,13 @@ int Employer::getID() const {
     return ID;
 }
 
+std::ostream& operator<<(std::ostream& os, const Employer& emp) {
+    os << emp.get_role()
+       << " (ID: " << emp.getID() << ") "
+       << "Energy: " << emp.getEnergy() << " "
+       << "[" << (emp.getUsed() ? "used" : "not used") << "]";
+    return os;
+}
 
 void Cashier::process(Order &order) {
     std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "processing order: "<<order.get_ID()<<"\n";

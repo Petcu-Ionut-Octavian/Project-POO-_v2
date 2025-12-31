@@ -6,6 +6,7 @@
 #define RESTAURANT_COMANDA_H
 
 #include <string>
+#include <utility>
 #include <vector>
 
 
@@ -17,6 +18,8 @@ public:
     Product(std::string name, double grams);
     virtual ~Product();
     virtual double energy_to_make() = 0;
+    virtual void print() const = 0;
+    friend std::ostream& operator<<(std::ostream& os, const Product& product);
 };
 
 
@@ -27,6 +30,7 @@ public:
     Drink(std::string name, double grams, bool pet);
     ~Drink() override;
     double energy_to_make() override;
+    void print() const override;
 };
 
 
@@ -37,6 +41,7 @@ public:
     Desert(std::string name, double grams, std::string serving_type);
     ~Desert() override;
     double energy_to_make() override;
+    void print() const override;
 };
 
 
@@ -47,6 +52,7 @@ public:
     Burger(std::string name, double grams);
     ~Burger() override;
     double energy_to_make() override;
+    void print() const override;
 };
 
 
@@ -66,8 +72,12 @@ public:
     [[nodiscard]] int get_ID() const { return ID; }
     [[nodiscard]] const std::string& get_state() const { return state; }
     [[nodiscard]] double get_remaining_energy() const { return energy_until_done; }
+    [[nodiscard]] bool is_empty() const { return products.empty(); }
 
     void set_remaining_energy(double amount) { energy_until_done = amount;}
+    void set_state(std::string new_state) { state = std::move(new_state); }
+
+    friend std::ostream& operator<<(std::ostream& os, const Order& ord);
 
 };
 

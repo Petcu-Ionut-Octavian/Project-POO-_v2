@@ -1,27 +1,57 @@
-#ifndef RESTAURANT_ERROR_H
-#define RESTAURANT_ERROR_H
+//
+// Created by User on 12/28/2025.
+//
 
-#include <exception>
-#include <string>
+#ifndef RESTAURANT_EMPLOYER_H
+#define RESTAURANT_EMPLOYER_H
 
-class team_empty : public std::exception {
+#include "Order.h"
+
+class Employer {
+protected:
+    double energy = 0;
+    bool used = false;
+    int ID;
+    inline static int ID_generator = 0;
 public:
-    explicit team_empty(const std::string& msg = "Team is empty");
+    Employer();
+    virtual ~Employer();
+    virtual void process(Order& order);
+    virtual void prepare(Order& order);
+    virtual void deliver(Order& order);
+    virtual void reset();
 
-    [[nodiscard]] const char* what() const noexcept override;
+    [[nodiscard]] std::string get_role() const;
+    [[nodiscard]] double getEnergy() const;
+    [[nodiscard]] bool getUsed() const;
+    [[nodiscard]] int getID() const;
 
-private:
-    std::string message;
+    void setUsed(bool used);
+
+    friend std::ostream& operator<<(std::ostream& os, const Employer& emp);
+
 };
 
-class no_more_orders : public std::exception {
+class Cashier final : public Employer {
 public:
-    explicit no_more_orders(const std::string& msg = "No more orders available");
-
-    [[nodiscard]] const char* what() const noexcept override;
-
-private:
-    std::string message;
+    Cashier();
+    ~Cashier() override;
+    void process(Order& order) override;
+};
+class Delivery final : public Employer {
+public:
+    Delivery();
+    ~Delivery() override;
+    void deliver(Order& order) override;
+};
+class Cook final : public Employer {
+public:
+    Cook();
+    ~Cook() override;
+    void prepare(Order& order) override;
+    void reset() override;
 };
 
-#endif // RESTAURANT_ERROR_H
+
+
+#endif //RESTAURANT_EMPLOYER_H

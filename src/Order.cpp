@@ -113,10 +113,8 @@ double Desert::energy_to_make() {
 }
 
 double Burger::energy_to_make() {
-    return this->grams * this->ingredients.size();
+    return this->grams * static_cast<double>(this->ingredients.size());
 }
-
-
 
 
 /// Order
@@ -265,4 +263,51 @@ void Order::next_state() {
         std::cout << "Order already delivered!\n";
     }
 }
+
+
+
+std::ostream& operator<<(std::ostream& os, const Product& product) {
+    product.print();   // call the virtual print() of the derived class
+    return os;
+}
+
+
+void Drink::print() const {
+    std::cout << name << " (" << grams << "g)"
+              << " | PET: " << (pet ? "yes" : "no");
+}
+
+void Desert::print() const {
+    std::cout << name << " (" << grams << "g)"
+              << " | Serving: " << serving_type;
+}
+
+void Burger::print() const {
+    std::cout << name << " (" << grams << "g)"
+              << " | Ingredients: ";
+
+    for (const auto& ing : ingredients) {
+        std::cout << ing << " ";
+    }
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Order& ord) {
+    os << "Order #" << ord.get_ID()
+       << " | State: " << ord.get_state();
+
+    if (ord.get_state() == "preparing") {
+        os << " | Remaining: " << ord.get_remaining_energy();
+    }
+
+    // The products printing here
+    os << "\nProducts:\n";
+    for (auto* product : ord.products) {
+        os << " - " << *product << "\n";
+    }
+
+    return os;
+}
+
+
 

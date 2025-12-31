@@ -10,33 +10,27 @@
 #include "../include/Order.h"
 #include "../include/Game.h"
 #include "../include/Error.h"
+#include "../include/Events.h"
 
 
-Game* Game::instance = nullptr;
-std::vector<Employer*> Game::team;
-std::vector<Order*> Game::orders;
 
-void Game::print_team() {
+void Game::print_team() const {
     std::cout << "#####################\n";
     if (team.empty()) {
-        std::cout << "Team is empty.\n";
-        return;
+        throw team_empty();
     }
 
     std::cout << "Your team:\n";
 
     for (auto* emp : team) {
-        std::cout << emp->get_role()
-          << " (ID: " << emp->getID() << ") "
-          << "Energy: " << emp->getEnergy() << " "
-          << "[" << (emp->getUsed() ? "used" : "not used") << "]"
-          << "\n";
+        std::cout << *emp << "\n";
     }
+
     std::cout << "#####################\n";
 }
 
 
-void Game::print_orders() {
+void Game::print_orders() const {
     std::cout << "#####################\n";
     if (orders.empty()) {
         std::cout << "No orders yet.\n";
@@ -47,18 +41,11 @@ void Game::print_orders() {
     std::cout << "Orders:\n";
 
     for (auto* ord : orders) {
-        std::cout << "Order #" << ord->get_ID()
-                  << " | State: " << ord->get_state();
-
-        if (ord->get_state() == "preparing") {
-            std::cout << " | Remaining: " << ord->get_remaining_energy();
-        }
-
-        std::cout << "\n";
+        std::cout << *ord << '\n';
     }
+
     std::cout << "#####################\n";
 }
-
 
 
 
@@ -164,10 +151,23 @@ void Game::start() {
         }
 
         if (choice == 1) {
-            auto ord = new Order();
-            orders.push_back(ord);
-            std::cout << "Order #" << ord->get_ID() << " added.\n";
+            try {
+                auto ord = new Order();
+
+                // If the order is empty, throw
+                if (ord->is_empty()) {
+                    delete ord;
+                    throw order_empty("Error: Order has no products.");
+                }
+
+                orders.push_back(ord);
+                std::cout << "Order #" << ord->get_ID() << " added.\n";
+
+            } catch (const order_empty& e) {
+                std::cout << e.what() << "\n";
+            }
         }
+
         else if (choice == 2) {
             std::cout << "Skipping cycle...\n";
         }
@@ -182,6 +182,77 @@ void Game::start() {
 
         /// Processing the events
         std::cout << "########## Starting the simulator...\n\n";
+
+
+        /// Random events
+
+        /// For employers
+        for (auto emp : team) {
+
+            // 1. Got sick
+            if (!emp->getUsed()) {
+                trigger_event(0.1, [&]() {
+                    emp->setUsed(true);
+                    std::cout << "Event: " << *emp << " got sick and is unable to work this turn!\n";
+                });
+            }
+
+            // 2. Unexpected emergency
+            if (!emp->getUsed()) {
+                trigger_event(0.1, [&]() {
+                    emp->setUsed(true);
+                    std::cout << "Event: " << *emp << " had an unexpected emergency and is unable to work this turn!\n";
+                });
+            }
+
+            // 3. Minor injury
+            if (!emp->getUsed()) {
+                trigger_event(0.1, [&]() {
+                    emp->setUsed(true);
+                    std::cout << "Event: " << *emp << " suffered a minor injury and is unable to work this turn!\n";
+                });
+            }
+
+            // 4. Personal matters
+            if (!emp->getUsed()) {
+                trigger_event(0.1, [&]() {
+                    emp->setUsed(true);
+                    std::cout << "Event: " << *emp << " is dealing with personal matters and is unable to work this turn!\n";
+                });
+            }
+
+            // 5. Transportation issue
+            if (!emp->getUsed()) {
+                trigger_event(0.1, [&]() {
+                    emp->setUsed(true);
+                    std::cout << "Event: " << *emp << " ran into transportation issues and is unable to work this turn!\n";
+                });
+            }
+
+            // 6. Exhaustion
+            if (!emp->getUsed()) {
+                trigger_event(0.1, [&]() {
+                    emp->setUsed(true);
+                    std::cout << "Event: " << *emp << " is too exhausted to work this turn!\n";
+                });
+            }
+
+        }
+
+        /// For orders
+        for (auto order : orders) {
+
+            // Order spilled
+            if (order->get_state() != "processing") {
+                trigger_event(0.1, [&]() {
+                    order->set_remaining_energy(order->energy_to_make());
+                    order->set_state("processing");
+                    std::cout << "Event: Order #" << order->get_ID()
+                              << " was spilled and has to be redone.\n";
+                });
+            }
+
+        }
 
 
 
@@ -260,7 +331,7 @@ void Game::run_role(const std::string& role_name) {
             continue;
 
         if (orders.empty())
-        throw no_more_orders();
+            throw no_more_orders();
 
         if (emp->get_role() != role_name)
             continue;
