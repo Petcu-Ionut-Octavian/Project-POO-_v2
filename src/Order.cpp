@@ -302,7 +302,7 @@ std::ostream& operator<<(std::ostream& os, const Order& ord) {
 
     // The products printing here
     os << "\nProducts:\n";
-    for (auto* product : ord.products) {
+    for (const auto* product : ord.products) {
         os << " - " << *product << "\n";
     }
 

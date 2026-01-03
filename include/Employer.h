@@ -26,7 +26,7 @@ public:
     [[nodiscard]] bool getUsed() const;
     [[nodiscard]] int getID() const;
 
-    void setUsed(bool used);
+    void setUsed(bool _used);
 
     friend std::ostream& operator<<(std::ostream& os, const Employer& emp);
 

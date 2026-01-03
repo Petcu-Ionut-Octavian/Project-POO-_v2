@@ -22,7 +22,7 @@ void Game::print_team() const {
 
     std::cout << "Your team:\n";
 
-    for (auto* emp : team) {
+    for (const auto* emp : team) {
         std::cout << *emp << "\n";
     }
 
@@ -40,7 +40,7 @@ void Game::print_orders() const {
 
     std::cout << "Orders:\n";
 
-    for (auto* ord : orders) {
+    for (const auto* ord : orders) {
         std::cout << *ord << '\n';
     }
 

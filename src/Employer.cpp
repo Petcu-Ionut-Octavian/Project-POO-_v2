@@ -18,8 +18,8 @@ Delivery::~Delivery() = default;
 
 
 
-void Employer::setUsed(bool used) {
-    this->used = used;
+void Employer::setUsed(const bool _used) {
+    this->used = _used;
 }
 
 
