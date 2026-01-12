@@ -3,6 +3,9 @@
 
 class Machine {
 private:
+    int ID;
+    inline static int ID_generator = 0;
+
     int max_energy;
     int energy;
     bool need_fix;
@@ -10,7 +13,7 @@ private:
 
 public:
 
-    Machine() : max_energy(100), energy(100), need_fix(false), used(false) {};
+    Machine() : max_energy(100), energy(100), need_fix(false), used(false), ID(++ID_generator) {};
     ~Machine() = default;
 
     void reset() {
@@ -30,6 +33,11 @@ public:
     void fix() {
         this->used = false;
         this->energy = this->max_energy;
+        this->need_fix = false;
+    }
+
+    [[nodiscard]] int get_ID() const {
+        return this->ID;
     }
 }
 

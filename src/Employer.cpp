@@ -61,8 +61,8 @@ void Employer::deliver(Order &order) {
 }
 
 void Employer::fix_machine(Machine& machine){
-    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<mac.get_ID()<<"\n";
-    machine->reset();
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<machine.get_ID()<<"\n";
+    machine->fix();
     this->used = true;
     this->energy -= 100;
 }
@@ -76,6 +76,7 @@ std::string Employer::get_role() const {
     if (dynamic_cast<const Cook*>(this))      return "Cook";
     if (dynamic_cast<const Cashier*>(this))   return "Cashier";
     if (dynamic_cast<const Delivery*>(this))  return "Delivery";
+    if (dynamic_cast<const Mecanic*>(this))  return "Mecanic";
     return "Employer";
 }
 

@@ -302,7 +302,10 @@ void Game::start() {
             // 3. Then delivery
             run_role("Delivery");
 
-            // 4. The rest
+            // 4. Fixing machines
+            run_role("Mecanic");
+
+            // 5. The rest
             run_rest();
 
         } catch (const no_more_orders& e) {
@@ -320,6 +323,11 @@ void Game::start() {
     // Reset all employers
     for (auto* emp : team) {
         emp->reset();
+    }
+
+    // Reset the machines
+    for (auto* machine : machines) {
+        machine->reset();
     }
 
 
@@ -358,6 +366,15 @@ void Game::run_role(const std::string& role_name) {
         if (role_name == "Cashier")   optimal = "processing";
         if (role_name == "Cook")      optimal = "preparing";
         if (role_name == "Delivery")  optimal = "delivering";
+        if (role_name == "Mecanic") {
+            for (auto* machine : machines) {
+                if(!machine->can_work()){
+                    emp -> fix_machine(machine);
+                    break;
+                }
+            }
+            continue;
+        }
 
         // Try to find an order in the optimal state
         for (auto it = orders.begin(); it != orders.end(); ++it) {
@@ -371,13 +388,19 @@ void Game::run_role(const std::string& role_name) {
                     emp->process(*order);
                 }
                 else if (optimal == "preparing") {
-                    emp->prepare(*order);
+                    for (auto* machine : machines) {
+                        if (machine->can_work()) {
+                            machine->use();
+                            emp->prepare(*order);
+                        }
+                    }
                 }
                 else if (optimal == "delivering") {
                     emp->deliver(*order);
                     delete order;
                     orders.erase(it);
                 }
+                
 
                 break;
             }
@@ -396,6 +419,13 @@ void Game::run_rest() {
         if (emp->getUsed())
             continue;
 
+        for (auto* machine : machines) {
+            if(!machine->can_work()){
+                emp -> fix_machine(machine);
+                break;
+            }
+        }
+
         if (orders.empty())
             throw no_more_orders();
 
@@ -408,7 +438,12 @@ void Game::run_rest() {
             emp->process(*order);
         }
         else if (state == "preparing") {
-            emp->prepare(*order);
+            for (auto* machine : machines) {
+                if (machine->can_work()) {
+                    machine->use();
+                    emp->prepare(*order);
+                }
+            }
         }
         else if (state == "delivering") {
             emp->deliver(*order);
