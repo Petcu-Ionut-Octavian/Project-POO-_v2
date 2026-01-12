@@ -1,6 +1,6 @@
-#include "../include/Machine.h"
-
 #include <iostream>
+
+#include "../include/Machine.h"
 
 
 std::ostream& operator<<(std::ostream& os, const Machine& machine){

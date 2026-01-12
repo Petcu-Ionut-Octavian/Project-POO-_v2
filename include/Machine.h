@@ -1,7 +1,6 @@
 #ifndef RESTAURANT_MACHINE_H
 #define RESTAURANT_MACHINE_H
 
-
 class Machine {
 private:
     int ID;
@@ -42,7 +41,7 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Machine& machine);
-}
+};
 
 
 #endif //RESTAURANT_MACHINE_H
