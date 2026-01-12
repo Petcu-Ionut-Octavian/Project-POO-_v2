@@ -11,6 +11,7 @@
 #include "../include/Game.h"
 #include "../include/Error.h"
 #include "../include/Events.h"
+#include "../include/Machine.h"
 
 
 
@@ -24,6 +25,17 @@ void Game::print_team() const {
 
     for (const auto* emp : team) {
         std::cout << *emp << "\n";
+    }
+
+    std::cout << "#####################\n";
+}
+
+void Game::print_machines() const {
+    std::cout << "#####################\n";
+    std::cout << "Your machines:\n";
+
+    for (const auto* machine : machines) {
+        std::cout << *machine << "\n";
     }
 
     std::cout << "#####################\n";
@@ -148,6 +160,7 @@ void Game::start() {
         std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Current cycle: " << cycle << "\n";
         print_team();
         print_orders();
+        print_machines();
 
         int choice;
 
@@ -319,6 +332,7 @@ void Game::start() {
     std::cout<<"\n<<<<<<<End of cycle: \n";
     print_team();
     print_orders();
+    print_machines();
 
     // Reset all employers
     for (auto* emp : team) {

@@ -1,6 +1,7 @@
 #ifndef RESTAURANT_MACHINE_H
 #define RESTAURANT_MACHINE_H
 
+
 class Machine {
 private:
     int ID;
@@ -39,6 +40,8 @@ public:
     [[nodiscard]] int get_ID() const {
         return this->ID;
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const Machine& machine);
 }
 
 
