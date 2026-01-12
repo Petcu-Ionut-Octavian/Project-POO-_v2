@@ -151,7 +151,7 @@ void Cook::reset() {
 }
 
 void Mecanic::fix_machine(Machine& machine){
-    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<mac.get_ID()<<"\n";
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<machine.get_ID()<<"\n";
     machine->reset();
     this->used = true;
     this->energy -= 20;
