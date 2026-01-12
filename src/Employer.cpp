@@ -60,8 +60,8 @@ void Employer::deliver(Order &order) {
     this->energy -= 100;
 }
 
-void Employer::fix_machine(Machine& machine){
-    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<machine.get_ID()<<"\n";
+void Employer::fix_machine(Machine* machine){
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<machine->get_ID()<<"\n";
     machine->fix();
     this->used = true;
     this->energy -= 100;
@@ -150,8 +150,8 @@ void Cook::reset() {
     this->used = false;
 }
 
-void Mecanic::fix_machine(Machine& machine){
-    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<machine.get_ID()<<"\n";
+void Mecanic::fix_machine(Machine* machine){
+    std::cout << this->get_role() << " (ID: " << this->getID() << ") " << "fixing machine: "<<machine->get_ID()<<"\n";
     machine->reset();
     this->used = true;
     this->energy -= 20;
