@@ -31,7 +31,7 @@ public:
     }
 
     void fix() {
-        this->used = false;
+        this->used = true;
         this->energy = this->max_energy;
         this->need_fix = false;
     }
