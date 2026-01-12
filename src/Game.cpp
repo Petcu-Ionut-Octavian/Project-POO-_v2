@@ -434,7 +434,7 @@ void Game::run_rest() {
             continue;
 
         for (auto* machine : machines) {
-            if(!machine->can_work() && !machine->used()){
+            if(!machine->can_work() && !machine->get_used()){
                 emp -> fix_machine(machine);
                 break;
             }
@@ -453,7 +453,7 @@ void Game::run_rest() {
         }
         else if (state == "preparing") {
             for (auto* machine : machines) {
-                if (machine->can_work() && !machine->used()) {
+                if (machine->can_work() && !machine->get_used()) {
                     machine->use();
                     emp->prepare(*order);
                 }
