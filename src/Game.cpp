@@ -389,7 +389,7 @@ void Game::run_role(const std::string& role_name) {
                 }
                 else if (optimal == "preparing") {
                     for (auto* machine : machines) {
-                        if (machine->can_work()) {
+                        if (machine->can_work() && !machine->used()) {
                             machine->use();
                             emp->prepare(*order);
                         }
@@ -439,7 +439,7 @@ void Game::run_rest() {
         }
         else if (state == "preparing") {
             for (auto* machine : machines) {
-                if (machine->can_work()) {
+                if (machine->can_work() && !machine->used()) {
                     machine->use();
                     emp->prepare(*order);
                 }

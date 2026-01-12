@@ -13,7 +13,7 @@ private:
 
 public:
 
-    Machine() : max_energy(100), energy(100), need_fix(false), used(false), ID(++ID_generator) {};
+    Machine() : ID(++ID_generator), max_energy(100), energy(100), need_fix(false), used(false) {};
     ~Machine() = default;
 
     void reset() {
