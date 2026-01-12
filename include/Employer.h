@@ -59,7 +59,7 @@ public:
     Mecanic();
     ~Mecanic() override;
     void fix_machine(Machine& machine) override;
-}
+};
 
 
 
