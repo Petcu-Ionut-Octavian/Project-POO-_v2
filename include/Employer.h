@@ -6,6 +6,7 @@
 #define RESTAURANT_EMPLOYER_H
 
 #include "Order.h"
+#include "Machine.h"
 
 class Employer {
 protected:
@@ -19,6 +20,7 @@ public:
     virtual void process(Order& order);
     virtual void prepare(Order& order);
     virtual void deliver(Order& order);
+    virtual void fix_machine(Machine& machine);
     virtual void reset();
 
     [[nodiscard]] std::string get_role() const;
@@ -51,6 +53,13 @@ public:
     void prepare(Order& order) override;
     void reset() override;
 };
+
+class Mecanic final : public Employer {
+public:
+    Mecanic();
+    ~Mecanic() override;
+    void fix_machine(Machine& machine) override;
+}
 
 
 

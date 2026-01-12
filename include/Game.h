@@ -4,6 +4,7 @@
 #include <vector>
 #include "Employer.h"
 #include "Order.h"
+#include "Machine.h"
 
 class Game {
 private:
@@ -15,6 +16,7 @@ private:
 
     std::vector<Employer*> team = {};
     std::vector<Order*> orders = {};
+    std::vector<Machine*> machines = {};
 
 public:
 
@@ -43,6 +45,8 @@ public:
     void print_orders() const;
 
     void set_team();
+
+    void set_machines();
 
     void start();
 

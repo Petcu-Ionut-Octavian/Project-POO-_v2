@@ -65,6 +65,12 @@ static int read_int(const std::string& prompt) {
     }
 }
 
+void Game::set_machines() {
+    machines.push_back(new Machine());
+    machines.push_back(new Machine());
+    machines.push_back(new Machine());
+}
+
 void Game::set_team() {
     int points = 1000;
     std::cout << "Make your team of employers, you have " << points << " points!\n";
@@ -75,6 +81,7 @@ void Game::set_team() {
         std::cout << "2. Cashier (100 points)\n";
         std::cout << "3. Delivery (150 points)\n";
         std::cout << "4. Start the simulator\n";
+        std::cout << "5. Mecanic (100points)\n";
 
         int choice = read_int("Your choice: ");
 
@@ -109,6 +116,15 @@ void Game::set_team() {
             team.push_back(new Delivery());
             points -= 150;
             std::cout << "Added Delivery. Remaining points: " << points << "\n";
+        }
+        else if (choice == 5) {
+            if (points < 100) {
+                std::cout << "Not enough points!\n";
+                continue;
+            }
+            team.push_back(new Mecanic());
+            points -= 100;
+            std::cout << "Added Mecanic. Remaining points: " << points << "\n";
         }
         else {
             std::cout << "Invalid option.\n";
@@ -316,6 +332,7 @@ void Game::start() {
 
 void Game::play() {
     set_team();
+    set_machines();
     start();
 }
 
