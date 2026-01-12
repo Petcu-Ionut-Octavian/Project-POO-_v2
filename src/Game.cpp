@@ -382,7 +382,7 @@ void Game::run_role(const std::string& role_name) {
         if (role_name == "Delivery")  optimal = "delivering";
         if (role_name == "Mecanic") {
             for (auto* machine : machines) {
-                if(!machine->can_work() && !machine->used()){
+                if(!machine->can_work() && !machine->get_used()){
                     emp -> fix_machine(machine);
                     break;
                 }
@@ -403,7 +403,7 @@ void Game::run_role(const std::string& role_name) {
                 }
                 else if (optimal == "preparing") {
                     for (auto* machine : machines) {
-                        if (machine->can_work() && !machine->used()) {
+                        if (machine->can_work() && !machine->get_used()) {
                             machine->use();
                             emp->prepare(*order);
                         }

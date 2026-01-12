@@ -40,6 +40,10 @@ public:
         return this->ID;
     }
 
+    [[nodiscard]] int get_used() const {
+        return this->used;
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Machine& machine);
 };
 
