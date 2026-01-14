@@ -20,7 +20,7 @@ public:
     virtual void process(Order& order);
     virtual void prepare(Order& order);
     virtual void deliver(Order& order);
-    virtual void fix_machine(Machine& machine);
+    virtual void fix_machine(Machine* machine);
     virtual void reset();
 
     [[nodiscard]] std::string get_role() const;
@@ -58,7 +58,7 @@ class Mecanic final : public Employer {
 public:
     Mecanic();
     ~Mecanic() override;
-    void fix_machine(Machine& machine) override;
+    void fix_machine(Machine* machine) override;
 };
 
 
