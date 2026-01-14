@@ -10,11 +10,13 @@ Employer::Employer() : energy(100), ID(++ID_generator) {}
 Cashier::Cashier() = default;
 Cook::Cook() = default;
 Delivery::Delivery() = default;
+Mecanic::Mecanic() = default;
 
 Employer::~Employer() = default;
 Cashier::~Cashier() = default;
 Cook::~Cook() = default;
 Delivery::~Delivery() = default;
+Mecanic::~Mecanic() = default;
 
 
 
