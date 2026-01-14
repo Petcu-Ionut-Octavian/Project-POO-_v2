@@ -406,6 +406,7 @@ void Game::run_role(const std::string& role_name) {
                         if (machine->can_work() && !machine->get_used()) {
                             machine->use();
                             emp->prepare(*order);
+                            break;
                         }
                     }
                 }
@@ -456,6 +457,7 @@ void Game::run_rest() {
                 if (machine->can_work() && !machine->get_used()) {
                     machine->use();
                     emp->prepare(*order);
+                    break;
                 }
             }
         }
