@@ -441,6 +441,9 @@ void Game::run_rest() {
             }
         }
 
+        if (emp->getUsed())
+            continue;
+
         if (orders.empty())
             throw no_more_orders();
 
