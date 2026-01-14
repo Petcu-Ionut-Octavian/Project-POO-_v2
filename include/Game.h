@@ -37,6 +37,9 @@ public:
 
         for (auto* emp : team)
             delete emp;
+
+        for (auto* machine : machines)
+            delete machine;
     }
 
 
