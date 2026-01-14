@@ -44,6 +44,8 @@ public:
 
     void print_orders() const;
 
+    void print_machines() const;
+
     void set_team();
 
     void set_machines();
